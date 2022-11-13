@@ -74,7 +74,7 @@ samtools      latest    cb5d97224fcd   5 days ago    576MB
 Now we re-tag it for pushing to our own personal [CAVATICA](cavatica.sbgenomics.com) docker container registry.  In my case I am using my CAVATICA USERID **`deslattesmaysa2`**
 
 ```bash
-docker tag 4acd7249c0f6 pgc-images.sbgenomics.com/[YOUR CAVATICA USERID]/bcftools:1.16
+docker tag 4acd7249c0f6 pgc-images.sbgenomics.com/[YOUR CAVATICA USERID]/bcftools:v1.16
 ```
 
 To see what has happened run the command **`docker images`** again and we see:
@@ -143,6 +143,18 @@ latest: digest: sha256:3b1976baa7c4aaa2afd25098c41c754e2579060b6c1da32282c45ac8a
 ### (optional) Build and Tag in one step
 
 An alternative to building and tagging in two steps (which allows testing of the image before commitment to the repository -- but all things can be undone if there is an error - you can delete an image from the repository 
+
+**`build and tag`**
+
+```bash
+docker build -t pgc-images.sbgenomics.com/deslattesmaysa2/bcftools:v1.16 .
+```
+and the **`push`**
+
+```bash
+ docker push pgc-images.sbgenomics.com/deslattesmaysa2/bcftools:v1.16
+ ```
+ 
 
 ## (Optional) Using bcftools outside of a container
 
