@@ -37,7 +37,7 @@ Then mount and use your current directory and call the tool now encapsulated wit
 Any bcftools command can be used to check.
 
 ```bash
-docker run -it -v $PWD:$PWD -w $PWD bcftools bcftools fastq
+docker run -it -v $PWD:$PWD -w $PWD bcftools bcftools -h 
 ```
 
 ## (Optional) Deposit your container in the your [CAVATICA](cavatica.sbgenomics.com)  Docker Registry
@@ -58,16 +58,42 @@ We have built and we did tag this (I built the above on my desktop which is a ma
 
 To tag the image just built, you need the image id, to get that simply use the command **`docker images`**.
 
+So we run:
 ```bash
 docker images
-REPOSITORY                                           TAG       IMAGE ID       CREATED          SIZE
-rmats                                                latest    0ca8aaf01be0   16 minutes ago   1.53GB
 ```
 
-Now we re-tag it for pushing to our own personal [CAVATICA](cavatica.sbgenomics.com) docker container registry.
+and we see:
 
 ```bash
-docker tag 0ca8aaf01be0 pgc-images.sbgenomics.com/[YOUR CAVATICA USERID]/rmats:v4.1.2
+REPOSITORY    TAG       IMAGE ID       CREATED       SIZE
+bcftools      latest    4acd7249c0f6   2 hours ago   566MB
+star          latest    264b10d079ae   2 days ago    125MB
+trimmomatic   latest    633fec609229   5 days ago    790MB
+samtools      latest    cb5d97224fcd   5 days ago    576MB
+```
+
+Now we re-tag it for pushing to our own personal [CAVATICA](cavatica.sbgenomics.com) docker container registry.  In my case I am using my CAVATICA USERID **`deslattesmaysa2`**
+
+```bash
+docker tag 4acd7249c0f6 pgc-images.sbgenomics.com/[YOUR CAVATICA USERID]/bcftools:1.16
+```
+
+To see what has happened run the command **`docker images`** again and we see:
+
+```bash
+docker images
+```
+
+returns:
+
+```bash
+REPOSITORY                                           TAG       IMAGE ID       CREATED       SIZE
+bcftools                                             latest    4acd7249c0f6   2 hours ago   566MB
+pgc-images.sbgenomics.com/deslattesmaysa2/bcftools   1.16      4acd7249c0f6   2 hours ago   566MB
+star                                                 latest    264b10d079ae   2 days ago    125MB
+trimmomatic                                          latest    633fec609229   5 days ago    790MB
+samtools                                             latest    cb5d97224fcd   5 days ago    576MB
 ```
 
 ### Docker registry login
@@ -80,9 +106,16 @@ Select Authentication Token, if you have not done so, generate that token.
 
 Then Copy the token and paste it in the proper location in the command below (after -p for password)
 
+For security, in stead of passing the **`AUTHENTICATION`** token on the command line.  
+
+Provided it when prompted for your **`Password`** as shown below:
+
 ```bash
-docker login pgc-images.sbgenomics.com -u [YOUR CAVATICA USERNAME] -p [YOUR AUTHENTICATION TOKEN]
+docker login pgc-images.sbgenomics.com -u deslattesmaysa2
+Password: 
+Login Succeeded
 ```
+
 
 ### Push
 
@@ -93,14 +126,14 @@ Now that we have
 * we have authenticated :whitecheck 
 
 ```bash
-docker push pgc-images.sbgenomics.com/[YOUR CAVATICA USERNAME]/bcftools:v1.16.1
+docker push pgc-images.sbgenomics.com/[YOUR CAVATICA NAME/bcftools:v1.16
 ```
 
 You know things are going correctly when you see something to the effect of:
 
 
 ```bash
-The push refers to repository [pgc-images.sbgenomics.com/deslattesmaysa2/bcftools:v1.16.1]
+The push refers to repository [pgc-images.sbgenomics.com/deslattesmaysa2/bcftools:v1.16]
 ea25457229f1: Pushed 
 17280cc0fa6b: Pushed 
 ab2731ec3f53: Pushed 
@@ -108,6 +141,10 @@ ab2731ec3f53: Pushed
 ad6562704f37: Pushed 
 latest: digest: sha256:3b1976baa7c4aaa2afd25098c41c754e2579060b6c1da32282c45ac8a10293a9 size: 1373
 ```
+
+### (optional) Build and Tag in one step
+
+An alternative to building and tagging in two steps (which allows testing of the image before commitment to the repository -- but all things can be undone if there is an error - you can delete an image from the repository 
 
 ## (Optional) Using bcftools outside of a container
 
@@ -144,3 +181,6 @@ GigaScience, Volume 10, Issue 2, February 2021, giab008, https://doi.org/10.1093
     eprint = {https://academic.oup.com/gigascience/article-pdf/10/2/giab008/36332246/giab008.pdf},
 }
 
+## CAVATICA documentation
+
+Please refer to [CAVATICA documentation](https://docs.cavatica.org/docs/upload-your-docker-image) for further details on creating, tagging and uploading your Docker images 
