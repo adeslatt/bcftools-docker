@@ -1,7 +1,5 @@
 # bcftools-docker
-## Bcftools build done with v1.16.1
-
-In this case, the conda install does not work -- instead, this Dockerfile gets the release.
+## Bcftools docker image with bcftools v1.16
 
 [Bcftools GitHub](http://samtools.github.io/bcftools/)
 
